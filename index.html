@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tour planning</title>
+
+    <script src="https://unpkg.com/jquery@1.11.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/jqueryui@1.11.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jqueryui@1.11.1/jquery-ui.min.css">
+    <script src="./js/leaflet-1.0.3/leaflet.js"></script>
+    <link rel="stylesheet" href="./js/leaflet-sidebar/leaflet-sidebar.min.css">
+    <link rel="stylesheet" type="text/css" href="./js/ptv/ptv_style.css"></link>
+    <link rel="stylesheet" type="text/css" href="./js/leaflet-1.0.3/leaflet.css">
+    </script>
+    <link rel="stylesheet" type="text/css" href="./js/bootstrap-3.3.2/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="./js/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" target="_blank">
+
+
+
+    <style>
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .map {
+            height: 100%
+        }
+
+        .bordered {
+            border-radius: 5px;
+            border: 2px solid #cdc9c9;
+            background: rgb(255, 255, 255);
+            padding: 20px 0px 20px 20px;
+            margin: 20px 20px 20px 0px;
+        }
+
+        .tooltip-wrapper {
+            display: inline-block;
+        }
+
+        .tooltip-wrapper .btn[disabled] {
+            pointer-events: none;
+        }
+
+        .tooltip-wrapper.disabled {
+            cursor: not-allowed;
+        }
+
+        label {
+            font-weight: normal
+        }
+    </style>
+
+
+</head>
+
+
+
+<div>
+    <h1 style="text-align:center;"> PTV xServer Zugriff </h1>
+    <h2 style="text-align:center;"> A Leaflet interaction side </h2>
+    <h3 style="text-align:center;"> by Sebastian Heilmann </h3>
+</div>
+
+<body onload="init()">
+    <!-- Notifications -->
+    <div id="Auth" title="Authentication" class="initiallyHidden">
+        <h4>
+            Please enter your xServer internet token:
+        </h4>
+
+        <p>
+            <input id="tokenInput" type="text" value="">
+            <input type="submit" value="Submit" onclick="handleAuth()">
+            <text style="color:red;font-weight:bold" id="error" />
+        </p>
+    </div>
+    <div class="bordered" style="height:auto">
+        <h4>Planning Horizon</h4>
+        <table>
+            <tr>
+                <td style="padding-right:5px">Start: </td>
+                <td>
+                    <input type="date" class="form-control" value="2017-01-02" id="horizon-start" onchange="sendRequest()" size="29">
+                </td>
+            </tr>
+            <tr>
+                <td>End: </td>
+                <td>
+                    <input type="date" class="form-control" value="2017-01-05" id="horizon-end" onchange="sendRequest()" size="29">
+                </td>
+            </tr>
+            <tr>
+
+            </tr>
+        </table>
+    </div>
+    <div class="controlPanel" id="display-mode-control">
+        <h5 style="margin-top:5px">
+            <b>Display mode</b>
+        </h5>
+        <div class="btn-group" data-toggle="buttons">
+            <label id="display-options-trips" class="btn btn-default display-options-label">
+                <input type="radio" name="display-options" id="trips" value="trips" autocomplete="off"> Trips </label>
+            <label id="display-options-tours" class="btn btn-default display-options-label">
+                <input type="radio" name="display-options" id="tours" value="tours" autocomplete="off"> Tours</label>
+            <label id="display-options-orders" class="btn btn-default active display-options-label">
+                <input type="radio" name="display-options" id="orders" value="orders" autocomplete="off" checked> Orders </label>
+        </div>
+        <div style="margin-top:10px">
+            <label>
+                <input type="checkbox" checked id="permanent-marker-tooltips"> Always show location ids</label>
+        </div>
+
+
+
+    </div>
+    <div style="height: 700px; width: 900px; margin-left: 25px; margin-right: 50px;" id="map" class="map">
+
+
+        <script type="text/javascript" src="./token.js"></script>
+
+        <script type="text/javascript" src="./services/xtour-client.js"></script>
+        <script type="text/javascript" src="./services/xdima-client.js"></script>
+
+        <script src="./js/leaflet-sidebar/leaflet-sidebar.min.js"></script>
+        <script src="./js/bootstrap-3.3.2/js/bootstrap.js"></script>
+
+        <script type="text/javascript" src="./js/ptv/ptv_controls.js"></script>
+        <script type="text/javascript" src="./js/ptv/common-utilities.js"></script>
+        <script type="text/javascript" src="./js/ptv/xtour-utilities.js"></script>
+        <script type="text/javascript" src="./js/ptv/xdima-utilities.js"></script>
+
+        <script type="text/javascript" src="./js/Leaflet.PolylineDecorator-973e8d1/leaflet.polylineDecorator.js"></script>
+        <script type="text/javascript" src="polyline-decorator.js"></script>
+        <script type="text/javascript" src="tourData.js"></script>
+        <script type="text/javascript" src="scenarioLoader.js"></script>
+        <script type="text/javascript" src="tourPlanning.js"></script>
+        <script type="text/javascript" src="L.Control.MousePosition.js"></script>
+</body>
+
+</html>
