@@ -1,0 +1,93 @@
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+
+
+# Graphics in SVG format are more sharp and legible
+# %config InlineBackend.figure_format = 'svg'
+
+def age_category(age):
+    if age < 30:
+        return 'under 20'
+    elif age > 60:
+        return 'over 60'
+
+
+def myPrint(myobject):
+    print('\n')
+    print(myobject)
+    print('\n')
+
+
+def findVorname(name):
+    if name.find("Charles") >= 0 :
+        return "Charles"
+    elif name.find("Thomas") >= 0 :
+        return "Thomas"
+    elif name.find("William") >= 0 :
+        return "William"
+    elif name.find("John") >= 0 :
+        return "John"
+    else:
+        return name
+
+
+if __name__ == '__main__':
+    pd.set_option("display.precision", 3)
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
+
+    data = pd.read_csv('./Data/titanic_train.csv', index_col='PassengerId')
+    myPrint(data.head(25))
+    myPrint(data.describe())
+    myPrint(data[(data['Embarked'] == 'C') & (data.Fare > 200)].head())
+    myPrint(data[(data['Embarked'] == 'C') & (data['Fare'] > 200)].sort_values(by='Fare', ascending=False).head())
+    data['Age_category'] = data['Age'].apply(age_category)
+    myPrint(data.sort_values(by='Fare', ascending=False).head())
+
+    # 1. Aufgabe IN:
+    myPrint(data[data['Sex'] == 'male'].count().max())
+    myPrint(data[data['Sex'] == 'female'].count().max())
+    # Out:
+    # 577 men  and 314 woman
+
+    # 2. Aufgabe IN:
+    myPrint(data.groupby(by='Pclass').describe())
+    myPrint(data[data["Sex"] == 'male'].groupby(by='Pclass').describe())
+    myPrint(data[data["Sex"] == 'female'].groupby(by='Pclass').describe())
+
+    myPrint(data[(data["Sex"] == "male") & (data["Pclass"] == 2)].count())
+    # 2 OUT:
+    # 108
+
+    # 3.Aufgabe
+    myPrint(data["Fare"].describe())
+    # median: 14.45 and std: 49.69
+
+    # 4. Aufgabe
+    myPrint(data.groupby(by='Survived')["Age"].mean())
+    # no
+
+    # 5. Aufgabe
+    myPrint(data.groupby(by="Age_category")["Survived"].mean())
+    # 40.6 % among yound and 22.7% among old
+
+    # 6. Aufgabe
+    myPrint(data.groupby(by="Sex")["Survived"].mean())
+    # 18.9% among men and 74.2% among women
+
+    # 7. Aufgabe
+    data['Vorname'] = data['Name'].apply(findVorname)
+    myPrint(data.head())
+    myPrint(data[data["Sex"] == "male"].groupby(by="Vorname")["Ticket"].count().sort_values())
+    # William
+
+    # 8. Aufgabe
+    myPrint(data.groupby(by="Pclass")["Age"].mean())
+    myPrint(data[data["Sex"] == "male"].groupby(by="Pclass").mean())
+    myPrint(data[data["Sex"] == "female"].groupby(by="Pclass").mean())
+
+    # on average men of first class are older then 40 ==> 41.281
+    # Mne of all classes are on average older than women of the same class
+    # On average, passangers of the first class are olde rthan those of the 2nd class who are older than passangers of the 3rd class
